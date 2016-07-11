@@ -1,0 +1,77 @@
+<!doctype html>
+<html ng-app="app.style1">
+<head>
+    <meta charset="utf-8">
+    <title>CAPH, For High performance web app.</title>
+    <link href="lib/caph/caph.min.css" rel="stylesheet" type="text/stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+
+    <!-- Include js file for popular js libraries  -->
+    <script type="text/javascript" src="lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="lib/angular/angular.js"></script>
+    <script type="text/javascript" src="lib/angular-sanitize/angular-sanitize.js"></script>
+    <script type="text/javascript" src="lib/caph/caph-angular.min.js"></script>
+
+    <!-- Include js file for app -->
+    <script type="text/javascript" src="scripts/app.js"></script>
+    <script type="text/javascript" src="scripts/controller.js"></script>
+    <script type="text/javascript" src="scripts/directives/list.js"></script>
+    <script type="text/javascript" src="scripts/directives/caphMedia.js"></script>
+    <script type="text/javascript" src="scripts/utils/constant.js"></script>
+</head>
+<body ng-controller="controller">
+
+<!-- Welcome : It will disappear when '$scope.isInitCompleted' become 'false'. -->
+<div class="welcome" ng-class="{'fade-out': isInitCompleted}">
+    <span class="caph">CAPH</span><br/>Web UI Framework for TV.
+</div>
+
+<div class="wrapper" ng-style="{'border-color': overview.color}" ng-include="'views/main.html'"></div>
+
+<!-- Video Player : It will be shown when '$scope.currentDepth' become 'DEPTH.PLAYER'. -->
+<caph-media ng-show="currentDepth === DEPTH.PLAYER" id="player" class="player" subtitle="setting.subTitle" on-play="toggleIsPlaying(true)" on-pause="toggleIsPlaying(false)" on-ended="toggleIsPlaying(false)">
+    <video style="width:100%">
+        <!-- Put your video file address into 'src' property in 'source' tag. -->
+        <source src="VideoAddress" type="video/mp4"></source>
+        <!-- Put your sub-title file address into 'src' property in 'track' tag. -->
+        <track src="SubTitleAddress" label="English subtitles" kind="subtitles" srclang="en"></track>
+    </video>
+    <caph-media-controls class="controls-bar" ng-class="{'fade-out': !showMediaController}" ng-mouseover="setMediaControllerTimer()">
+        <div class="opacity-panel">
+            <div class="operations">
+                <div focusable="{depth: DEPTH.PLAYER, name: 'btnPlayerRestart'}" class="btn-player" on-selected="controls.restart()">
+                    <div class="btn-icon-player icon-caph icon-caph-prev"></div>
+                </div>
+                <div focusable="{depth: DEPTH.PLAYER, name: 'btnPlayerRewind'}" class="btn-player" on-selected="controls.rewind()">
+                    <div class="btn-icon-player icon-caph icon-caph-rewind"></div>
+                </div>
+                <div focusable="{depth: DEPTH.PLAYER, name: 'btnPlayerPlay', initialFocus: true}" class="btn-player" on-selected="controls.togglePlay()">
+                    <div class="btn-icon-player icon-caph" ng-class="{'icon-caph-pause': isPlaying, 'icon-caph-play': !isPlaying}"></div>
+                </div>
+                <div focusable="{depth: DEPTH.PLAYER, name: 'btnForward'}" class="btn-player" on-selected="controls.forward()">
+                    <div class="btn-icon-player icon-caph icon-caph-forward"></div>
+                </div>
+                <div focusable="{depth: DEPTH.PLAYER, name: 'btnPlayerNext'}" class="btn-player" on-selected="controls.next()">
+                    <div class="btn-icon-player icon-caph icon-caph-next"></div>
+                </div>
+            </div>
+        </div>
+        <div class="setting-panel">
+            <div focusable="{depth: DEPTH.PLAYER, name: 'btnPlayerReturn'}" class="btn-player-setting" on-selected="back()">
+                <div class="btn-icon-player-setting icon-caph icon-caph-return"></div>
+            </div>
+        </div>
+    </caph-media-controls>
+</caph-media>
+
+<!-- Setting dialog : It will be shown when the 'setting' button is clicked by user. -->
+<caph-dialog focus-option="setting.focusOption" center="true" show="setting.show" style="width:800px;">
+    <caph-dialog-title>Setting</caph-dialog-title>
+    <caph-dialog-content>
+        <caph-checkbox focus-option="setting.focusOption" checked="setting.autoPlay" on-selected="setting.setAutoPlay($event, $checked, $originalEvent)"> Auto Play</caph-checkbox>
+        <caph-checkbox focus-option="setting.focusOption" checked="setting.subTitle" on-selected="setting.setSubTitle($event, $checked, $originalEvent)"> Show Sub-Title</caph-checkbox>
+    </caph-dialog-content>
+    <caph-dialog-buttons button-type="alert" on-select-button="setting.onSelectButton($buttonIndex, $event)"></caph-dialog-buttons>
+</caph-dialog>
+</body>
+</html>

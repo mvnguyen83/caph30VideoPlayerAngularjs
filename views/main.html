@@ -1,0 +1,42 @@
+<div id="move-container" class="move-container" ng-class="{'opacity-dark':isOverviewDark,'opacity-light':!isOverviewDark}">
+    <div class="logo"></div>
+    <div class="top-right-area" >
+        <!-- It will be shown when '$scope.currentDepth' become 'DEPTH.INDEX'. -->
+        <div focusable="{depth: DEPTH.INDEX}" class="btn btn-gap btn-setting" ng-show="currentDepth === DEPTH.INDEX" on-focused="buttonFocusInDetail($event, $originalEvent)" on-selected="setting.show=true">
+            <div class="btn-icon icon-caph icon-caph-setting"></div>
+        </div>
+        <!-- It will be shown when '$scope.currentDepth' become 'DEPTH.DETAIL'. -->
+        <div focusable="{depth: DEPTH.DETAIL, nextFocus: {down: 'btnPlay'}}" class="btn btn-gap btn-return" ng-show="currentDepth === DEPTH.DETAIL" on-focused="buttonFocusInDetail($event, $originalEvent)" on-selected="back()">
+            <div class="btn-icon icon-caph icon-caph-return"></div>
+        </div>
+    </div>
+    <!-- OVERVIEW -->
+    <div class="overview">
+        <div class="font-header" ng-style="{'color': overview.color}" ng-bind-html="overview.name"></div>
+    </div>
+    
+    <!-- page: INDEX (OVERVIEW) -->
+    <div class="page" ng-class="{'page-fade-in': currentDepth === DEPTH.INDEX}" ng-hide="currentDepth === DEPTH.DETAIL || currentDepth === DEPTH.PLAYER">
+        <div class="overview desc font-body" ng-bind-html="overview.description"></div>
+    </div>
+
+    <!-- page: TALK (OVERVIEW) -->
+    <div class="overview desc font-body" ng-show="currentDepth === DEPTH.DETAIL" ng-bind-html="overview.description"></div>
+    <div class="btn-wrapper" ng-show="currentDepth === DEPTH.DETAIL">
+        <div focusable="{depth: DEPTH.DETAIL, initialFocus: true, name: 'btnPlay'}" class="btn btn-gap" ng-class="{'btn-play':true, 'btn-resume': false}" on-focused="buttonFocusInDetail($event, $originalEvent)" on-selected="selectPlayButton()">
+            <div class="btn-icon icon-caph icon-caph-play"></div>
+        </div>
+    </div>
+    <!-- page: TALK (LIST) -->
+    <div class="related-play-list">
+        <related-play-list ng-show="currentDepth === DEPTH.DETAIL" title="Related talks"></related-play-list>
+    </div>
+</div>
+<!-- page: INDEX (LIST) -->
+<div class="list-wrapper page" ng-class="{'page-fade-in': currentDepth === DEPTH.INDEX}" ng-hide="currentDepth === DEPTH.DETAIL || currentDepth === DEPTH.PLAYER">
+    <div id="list-category" class="list-category">
+        <play-list id="{{CATEGORY.COLORS}}" title="Colors"></play-list>
+        <play-list id="{{CATEGORY.ALPHABETS}}" title="Alphabets"></play-list>
+        <play-list-sm id="{{CATEGORY.NUMBERS}}" title="Numbers"></play-list-sm>
+    </div>
+</div>
